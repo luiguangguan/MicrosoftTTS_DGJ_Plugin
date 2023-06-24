@@ -1,0 +1,67 @@
+﻿<Window x:Class="MicrosoftTTS_DGJ_Plugin.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MicrosoftTTS_DGJ_Plugin"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid  >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="微软语音服务订阅Key:" Margin="10" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding MicrosoftTTS.subscriptionKey,Mode=TwoWay}" Grid.Row="0" Margin="10" VerticalAlignment="Center" Width="200"/>
+            <!--<TextBox Text="{Binding TestText,Mode=TwoWay}" Grid.Row="0" Margin="10" VerticalAlignment="Center" Width="200"/>-->
+
+            <TextBlock Grid.Row="1" Text="微软语音服务订阅地区:" Margin="10" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding MicrosoftTTS.subscriptionRegion,Mode=TwoWay}" Grid.Row="1" Margin="10" VerticalAlignment="Center" Width="200"/>
+
+            <TextBlock Grid.Row="2" Text="AI语音角色:" Margin="10" VerticalAlignment="Center"/>
+            <ComboBox 
+                x:Name="cbAiRoles"
+                 ItemsSource="{Binding MicrosoftTTS.AiRoleComboBoxList}"
+                SelectedValue="{Binding Path=MicrosoftTTS.VoiceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                       SelectedValuePath="Tag"
+                      Grid.Row="2" Margin="10" VerticalAlignment="Center" Width="200">
+                <!--<ComboBoxItem Content="晓晓" Tag="zh-CN-XiaoxiaoNeural"/>
+                <ComboBoxItem Content="小敏" Tag="zh-CN-XiaominNeural"/>-->
+            </ComboBox>
+
+            <TextBlock Grid.Row="3" Text="AI说话风格:" Margin="10" VerticalAlignment="Center"/>
+            <ComboBox 
+                x:Name="cbAiVoiceStyle"
+                 ItemsSource="{Binding MicrosoftTTS.AiVoiceStyleComboBoxList}"
+                SelectedValue="{Binding Path=MicrosoftTTS.VoiceStyle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                       SelectedValuePath="Tag"
+                      Grid.Row="3" Margin="10" VerticalAlignment="Center" Width="200">
+                <!--<ComboBoxItem Content="中性风格" Tag="neutral"/>
+                <ComboBoxItem Content="随意、非正式的聊天风格" Tag="chat"/>
+                <ComboBoxItem Content="新闻播报风格" Tag="newscast"/>
+                <ComboBoxItem Content="欢快、令人高兴的风格" Tag="cheerful"/>
+                <ComboBoxItem Content="亲切、深情的风格" Tag="affectionate"/>
+                <ComboBoxItem Content="商务、专业的风格" Tag="business"/>
+                <ComboBoxItem Content="富有同理心的风格" Tag="empathetic"/>
+                <ComboBoxItem Content="兴奋、激动的风格" Tag="excited"/>
+                <ComboBoxItem Content="正式、庄重的风格" Tag="formal"/>
+                <ComboBoxItem Content="愤怒、生气的风格" Tag="angry"/>
+                <ComboBoxItem Content="平静、镇定的风格" Tag="calm"/>
+                <ComboBoxItem Content="悲伤、沮丧的风格" Tag="sad"/>
+                <ComboBoxItem Content="疲倦、困乏的风格" Tag="tired"/>
+                <ComboBoxItem Content="强调、有力的风格" Tag="emphatic"/>-->
+            </ComboBox>
+
+            <TextBox Text="{Binding TestText,Mode=TwoWay}"  Margin="10,10,10,10" Grid.Row="4"></TextBox>
+            <!--<TextBox Text="{Binding MicrosoftTTS.VoiceStyle,Mode=OneWay}"  Margin="10,10,10,10" Grid.Row="4"></TextBox>-->
+            <!--<Button Command="{Binding TestSpeakingCommand}" Maergin="10,10,10,10" Grid.Row="5">测试</Button>-->
+            <Button Click="Button_Click" Margin="10,10,10,10" Grid.Row="5">测试</Button>
+        </Grid>
+    </Grid>
+</Window>
