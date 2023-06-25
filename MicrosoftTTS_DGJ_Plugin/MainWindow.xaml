@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MicrosoftTTS_DGJ_Plugin"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="619" Width="800">
     <Grid>
         <Grid  >
             <Grid.RowDefinitions>
@@ -13,36 +13,41 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
+            <GroupBox Grid.Row="0" Margin="10" Header="微软API设置">
+                <Grid  >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="微软语音服务订阅Key:" Margin="10" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding MicrosoftTTS.subscriptionKey,Mode=TwoWay}" Grid.Row="0" Margin="10" VerticalAlignment="Center" Width="200"/>
 
-            <TextBlock Text="微软语音服务订阅Key:" Margin="10" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding MicrosoftTTS.subscriptionKey,Mode=TwoWay}" Grid.Row="0" Margin="10" VerticalAlignment="Center" Width="200"/>
-            <!--<TextBox Text="{Binding TestText,Mode=TwoWay}" Grid.Row="0" Margin="10" VerticalAlignment="Center" Width="200"/>-->
+                    <TextBlock Grid.Row="1" Text="微软语音服务订阅地区:" Margin="10" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding MicrosoftTTS.subscriptionRegion,Mode=TwoWay}" Grid.Row="1" Margin="10" VerticalAlignment="Center" Width="200"/>
 
-            <TextBlock Grid.Row="1" Text="微软语音服务订阅地区:" Margin="10" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding MicrosoftTTS.subscriptionRegion,Mode=TwoWay}" Grid.Row="1" Margin="10" VerticalAlignment="Center" Width="200"/>
-
-            <TextBlock Grid.Row="2" Text="AI语音角色:" Margin="10" VerticalAlignment="Center"/>
-            <ComboBox 
+                    <TextBlock Grid.Row="2" Text="AI语音角色:" Margin="10" VerticalAlignment="Center"/>
+                    <ComboBox 
                 x:Name="cbAiRoles"
                  ItemsSource="{Binding MicrosoftTTS.AiRoleComboBoxList}"
                 SelectedValue="{Binding Path=MicrosoftTTS.VoiceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        SelectedValuePath="Tag"
                       Grid.Row="2" Margin="10" VerticalAlignment="Center" Width="200">
-                <!--<ComboBoxItem Content="晓晓" Tag="zh-CN-XiaoxiaoNeural"/>
+                        <!--<ComboBoxItem Content="晓晓" Tag="zh-CN-XiaoxiaoNeural"/>
                 <ComboBoxItem Content="小敏" Tag="zh-CN-XiaominNeural"/>-->
-            </ComboBox>
+                    </ComboBox>
 
-            <TextBlock Grid.Row="3" Text="AI说话风格:" Margin="10" VerticalAlignment="Center"/>
-            <ComboBox 
+                    <TextBlock Grid.Row="3" Text="AI说话风格:" Margin="10" VerticalAlignment="Center"/>
+                    <ComboBox 
                 x:Name="cbAiVoiceStyle"
                  ItemsSource="{Binding MicrosoftTTS.AiVoiceStyleComboBoxList}"
                 SelectedValue="{Binding Path=MicrosoftTTS.VoiceStyle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        SelectedValuePath="Tag"
                       Grid.Row="3" Margin="10" VerticalAlignment="Center" Width="200">
-                <!--<ComboBoxItem Content="中性风格" Tag="neutral"/>
+                        <!--<ComboBoxItem Content="中性风格" Tag="neutral"/>
                 <ComboBoxItem Content="随意、非正式的聊天风格" Tag="chat"/>
                 <ComboBoxItem Content="新闻播报风格" Tag="newscast"/>
                 <ComboBoxItem Content="欢快、令人高兴的风格" Tag="cheerful"/>
@@ -56,12 +61,59 @@
                 <ComboBoxItem Content="悲伤、沮丧的风格" Tag="sad"/>
                 <ComboBoxItem Content="疲倦、困乏的风格" Tag="tired"/>
                 <ComboBoxItem Content="强调、有力的风格" Tag="emphatic"/>-->
-            </ComboBox>
+                    </ComboBox>
 
-            <TextBox Text="{Binding TestText,Mode=TwoWay}"  Margin="10,10,10,10" Grid.Row="4"></TextBox>
+                    <TextBlock Grid.Row="4" Text="音量等级:" Margin="10" VerticalAlignment="Center"/>
+                    <ComboBox
+                SelectedValue="{Binding Path=MicrosoftTTS.Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                       SelectedValuePath="Tag"
+                      Grid.Row="4" Margin="10" VerticalAlignment="Center" Width="200">
+                        <ComboBoxItem Content="极低音量" Tag="x-soft"/>
+                        <ComboBoxItem Content="较低音量" Tag="soft"/>
+                        <ComboBoxItem Content="中等音量" Tag="medium"/>
+                        <ComboBoxItem Content="较高音量" Tag="loud"/>
+                        <ComboBoxItem Content="非常高音量" Tag="x-loud"/>
+                    </ComboBox>
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Row="1" Margin="10" Header="代理设置">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="10,10,10,10" Grid.Row="0" Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding MicrosoftTTS.EnableProxy}" Grid.Row="4"  Margin="10,10,10,10" >开启代理</CheckBox>
+                    </StackPanel>
+                    <StackPanel Margin="10,10,10,10" Grid.Row="1" Orientation="Horizontal">
+                        <TextBlock Text="服务器地址" Margin="10,10,10,10"/>
+                        <TextBox Text="{Binding MicrosoftTTS.ProxyServer}" Width="220" ToolTip="输入代理服务器地址，如：example.com" Margin="10,10,10,10"/>
+                        <TextBlock Text="端口" Margin="10,10,10,10"/>
+                        <TextBox Text="{Binding MicrosoftTTS.ProxyServerPort}" ToolTip="输入代理服务器端口，范围是：0-65535" Width="107" Margin="10,10,10,10"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="10,10,10,10" Grid.Row="2" Orientation="Horizontal">
+                        <TextBlock Text="用户名" Margin="10,10,10,10"/>
+                        <TextBox  Text="{Binding MicrosoftTTS.ProxyServerUser}" ToolTip="如果代理服务器需要用户验证，请填写用户" Width="198" Margin="10,10,10,10"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="10,10,10,10" Grid.Row="3" Orientation="Horizontal">
+                        <TextBlock Text="密码" Margin="10,10,10,10"/>
+                        <TextBox Text="{Binding MicrosoftTTS.ProxyServerPassword}" ToolTip="如果代理服务器需要密码验证，请填写密码" Width="194" Margin="20,10,10,10"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            
+            
+            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                <TextBox Text="{Binding TestText, Mode=TwoWay}" Margin="90,10,10,10"  Width="250"/>
+                <Button Click="Button_Click" Width="200" Margin="10" Content="测试（试听）"/>
+            </StackPanel>
+
             <!--<TextBox Text="{Binding MicrosoftTTS.VoiceStyle,Mode=OneWay}"  Margin="10,10,10,10" Grid.Row="4"></TextBox>-->
             <!--<Button Command="{Binding TestSpeakingCommand}" Maergin="10,10,10,10" Grid.Row="5">测试</Button>-->
-            <Button Click="Button_Click" Margin="10,10,10,10" Grid.Row="5">测试</Button>
         </Grid>
     </Grid>
 </Window>

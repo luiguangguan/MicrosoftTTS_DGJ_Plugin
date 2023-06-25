@@ -41,7 +41,7 @@ namespace MicrosoftTTS_DGJ_Plugin
             this.PluginDesc = Utilities.PluginDesc;
             this.PluginVer = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
             base.Start();
-            LoadAllReferencedAssemblies();
+            //LoadAllReferencedAssemblies();
             versionChecker = new VersionChecker("MicrosoftTTS_DGJ_Plugin");
             Task.Run(() =>
             {
@@ -127,7 +127,7 @@ namespace MicrosoftTTS_DGJ_Plugin
         {
             try
             {
-                Assembly dgjAssembly = Assembly.GetAssembly(typeof(SearchModule)); //如果没有点歌姬插件，插件的构造方法会抛出异常，无需考虑这里的assembly == null的情况
+                Assembly dgjAssembly = Assembly.GetAssembly(typeof(WindowsTTS)); //如果没有点歌姬插件，插件的构造方法会抛出异常，无需考虑这里的assembly == null的情况
                 DMPlugin dgjPlugin = Bililive_dm.App.Plugins.FirstOrDefault(p => p is DGJMain);
                 if (dgjPlugin == null) // 没有点歌姬
                 {
@@ -142,29 +142,17 @@ namespace MicrosoftTTS_DGJ_Plugin
                 {
                     dgjWindow = e.Types.FirstOrDefault(p => p.Name == "DGJMain").GetField("window", BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(dgjPlugin);
                 }
-                ObservableCollection<ITTS> TTSlist = (ObservableCollection<ITTS>)dgjWindow.GetType().GetProperty("TTSlist", BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public).GetValue(dgjWindow);
+                ObservableCollection<TTS> TTSlist = (ObservableCollection<TTS>)dgjWindow.GetType().GetProperty("TTSlist", BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public).GetValue(dgjWindow);
 
                 var wtts = (WindowsTTS)dgjWindow.GetType().GetProperty("WindowsTTS", BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public).GetValue(dgjWindow);
-                //ObservableCollection<SearchModule> searchModules2 = (ObservableCollection<SearchModule>)searchModules.GetType().GetProperty("Modules", BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public).GetValue(searchModules);
-                //SearchModule nullModule = (SearchModule)searchModules.GetType().GetProperty("NullModule", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance).GetValue(searchModules);
-                //SearchModule lwlModule = searchModules2.FirstOrDefault(p => p != nullModule);
-                //MicrosoftTTS module = _mainWindow.MicrosoftTTS;
                 if (wtts != null)
                 {
-                    //var a= wtts.GetType().GetMethod("Log", BindingFlags.NonPublic | BindingFlags.Instance| BindingFlags.GetProperty);
-                    //Action<string, Exception> logHandler = (Action<string, Exception>)wtts.GetType().GetProperty("Log", BindingFlags.GetProperty| BindingFlags.NonPublic | BindingFlags.Instance).GetValue(wtts);
-
                     Type type = wtts.GetType();  // 获取包含方法的类型
-                    MethodInfo methodInfo = type.GetMethod("Log");  // 获取方法的 MethodInfo 对象
-                    var instance = Activator.CreateInstance(type);  // 创建类型的实例
-
-                    // 创建委托
-                    Action<string, Exception> logMethod = (Action<string, Exception>)Delegate.CreateDelegate(typeof(Action<string, Exception>), instance, methodInfo);
-
+                    MethodInfo methodInfo = type.GetMethod("Log", BindingFlags.NonPublic | BindingFlags.Instance);  // 获取方法的 MethodInfo 对象
 
                     _mainWindow.MicrosoftTTS.LogEvent += (object sender, LogEventArgs e) =>
                     {
-                        logMethod.Invoke("注入的方法", e.Exception);
+                        methodInfo?.Invoke(wtts,new object[] { $"{Utilities.PluginName}:{e.Message}", e.Exception});
                     };
                 }
                 TTSlist.Insert(TTSlist.Count - 1 > -1 ? TTSlist.Count - 1 : 0, _mainWindow.MicrosoftTTS);

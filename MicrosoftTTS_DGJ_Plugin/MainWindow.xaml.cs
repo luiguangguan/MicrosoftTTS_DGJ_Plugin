@@ -70,6 +70,12 @@ namespace MicrosoftTTS_DGJ_Plugin
             MicrosoftTTS.subscriptionRegion = config.subscriptionRegion;
             MicrosoftTTS.VoiceName = config.VoiceName;
             MicrosoftTTS.VoiceStyle = config.VoiceStyle;
+            MicrosoftTTS.EnableProxy = config.enableProxy;
+            MicrosoftTTS.ProxyServer = config.proxyServer;
+            MicrosoftTTS.ProxyServerPort = config.proxyServerPort;
+            MicrosoftTTS.ProxyServerUser = config.proxyServerUser;
+            MicrosoftTTS.ProxyServerPassword = config.proxyServerPassword;
+            MicrosoftTTS.Volume = config.volume;
         }
         private void TestSpeakingClick(object parameter)
         {
@@ -90,7 +96,13 @@ namespace MicrosoftTTS_DGJ_Plugin
             subscriptionKey = MicrosoftTTS.subscriptionKey,
             subscriptionRegion = MicrosoftTTS.subscriptionRegion,
             VoiceName = MicrosoftTTS.VoiceName,
-            VoiceStyle = MicrosoftTTS.VoiceStyle
+            VoiceStyle = MicrosoftTTS.VoiceStyle,
+            enableProxy = MicrosoftTTS.EnableProxy,
+            proxyServer = MicrosoftTTS.ProxyServer,
+            proxyServerPort = MicrosoftTTS.ProxyServerPort,
+            proxyServerUser = MicrosoftTTS.ProxyServerUser,
+            proxyServerPassword = MicrosoftTTS.ProxyServerPassword,
+            volume = MicrosoftTTS.Volume,
         };
 
         internal void DeInit()
