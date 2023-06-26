@@ -176,7 +176,7 @@ namespace MicrosoftTTS_DGJ_Plugin
        xmlns:mstts=""https://www.w3.org/2001/mstts"" xml:lang=""zh-CN"">
     <voice name=""{VoiceName}"">
         <mstts:express-as style=""{VoiceStyle}"" styledegree=""2"">
-        <prosody volume='{Volume}'>{text}</prosody>
+        <prosody volume='{(string.IsNullOrEmpty(Volume) ? "medium" :Volume)}'>{text}</prosody>
         </mstts:express-as>
     </voice>
 </speak>";
