@@ -40,7 +40,7 @@ jobs:
           }
           $version = $version.Trim()
           Write-Host "Version: $version"
-          Write-Host "::set-output name=version::$version"
+          Write-Host "version=$version" >> GITHUB_OUTPUT
 
       #判断是否存在这个发布版本
       - name: Check if release exists
@@ -112,7 +112,7 @@ jobs:
       #  if: ${{ steps.check_release.outputs.release_exists == 'false' }}
       #  run: |
       #    git log -1 --pretty=format:"%b" > commit_message.txt
-      #    echo "::set-output name=commit_message::$(cat commit_message.txt)"
+      #    echo "commit_message=$(cat commit_message.txt)" >> GITHUB_OUTPUT
       
       - name: Get update description
         id: get_update_description
@@ -120,7 +120,7 @@ jobs:
         run: |
           try {
             $desc = Get-Content -Raw -Path ./update_description.md
-            Write-Host "::set-output name=update_description::$desc"
+            Write-Host "update_description=$desc" >> GITHUB_OUTPUT
           } catch {
             $desc = ""
             echo "
