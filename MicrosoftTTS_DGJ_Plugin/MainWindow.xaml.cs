@@ -131,6 +131,15 @@ namespace MicrosoftTTS_DGJ_Plugin
             return roles;
         }
 
-
+        private void Button_Click_Copypwd(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Clipboard.SetText(MicrosoftTTS.subscriptionKey);
+            }
+            catch (Exception ex)
+            {
+            }
+        }
     }
 }

@@ -23,30 +23,40 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="微软语音服务订阅Key:" Margin="10" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding MicrosoftTTS.subscriptionKey,Mode=TwoWay}" Grid.Row="0" Margin="10" VerticalAlignment="Center" Width="200"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="微软语音服务订阅Key:" Margin="10" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                    <!--<TextBox Text="{Binding MicrosoftTTS.subscriptionKey,Mode=TwoWay}" Grid.Row="0" Margin="10" VerticalAlignment="Center" Width="200"/>-->
+                    <PasswordBox Grid.Row="0" Grid.Column="1"  Margin="0,0,0,0" local:PasswordHelper.Attach="True" 
+                                 Height="20"
+                             local:PasswordHelper.Password="{Binding MicrosoftTTS.subscriptionKey, Mode=TwoWay}" 
+                             Width="200"/>
+                    <Button Height="30" Width="40" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Click="Button_Click_Copypwd" >复制</Button>
 
-                    <TextBlock Grid.Row="1" Text="微软语音服务订阅地区:" Margin="10" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding MicrosoftTTS.subscriptionRegion,Mode=TwoWay}" Grid.Row="1" Margin="10" VerticalAlignment="Center" Width="200"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0"  Text="微软语音服务订阅地区:" Margin="10" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding MicrosoftTTS.subscriptionRegion,Mode=TwoWay}" Grid.Row="1" Grid.Column="1" Margin="10" VerticalAlignment="Center" Width="200"/>
 
-                    <TextBlock Grid.Row="2" Text="AI语音角色:" Margin="10" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="AI语音角色:" Margin="10" VerticalAlignment="Center"/>
                     <ComboBox 
                 x:Name="cbAiRoles"
                  ItemsSource="{Binding MicrosoftTTS.AiRoleComboBoxList}"
                 SelectedValue="{Binding Path=MicrosoftTTS.VoiceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        SelectedValuePath="Tag"
-                      Grid.Row="2" Margin="10" VerticalAlignment="Center" Width="200">
+                      Grid.Row="2" Grid.Column="1" Margin="10" VerticalAlignment="Center" Width="200">
                         <!--<ComboBoxItem Content="晓晓" Tag="zh-CN-XiaoxiaoNeural"/>
                 <ComboBoxItem Content="小敏" Tag="zh-CN-XiaominNeural"/>-->
                     </ComboBox>
 
-                    <TextBlock Grid.Row="3" Text="AI说话风格:" Margin="10" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="3"  Grid.Column="0" Text="AI说话风格:" Margin="10" VerticalAlignment="Center"/>
                     <ComboBox 
                 x:Name="cbAiVoiceStyle"
                  ItemsSource="{Binding MicrosoftTTS.AiVoiceStyleComboBoxList}"
                 SelectedValue="{Binding Path=MicrosoftTTS.VoiceStyle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        SelectedValuePath="Tag"
-                      Grid.Row="3" Margin="10" VerticalAlignment="Center" Width="200">
+                      Grid.Row="3"  Grid.Column="1" Margin="10" VerticalAlignment="Center" Width="200">
                         <!--<ComboBoxItem Content="中性风格" Tag="neutral"/>
                 <ComboBoxItem Content="随意、非正式的聊天风格" Tag="chat"/>
                 <ComboBoxItem Content="新闻播报风格" Tag="newscast"/>
@@ -63,11 +73,11 @@
                 <ComboBoxItem Content="强调、有力的风格" Tag="emphatic"/>-->
                     </ComboBox>
 
-                    <TextBlock Grid.Row="4" Text="音量等级:" Margin="10" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="4"  Grid.Column="0" Text="音量等级:" Margin="10" VerticalAlignment="Center"/>
                     <ComboBox
                 SelectedValue="{Binding Path=MicrosoftTTS.Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        SelectedValuePath="Tag"
-                      Grid.Row="4" Margin="10" VerticalAlignment="Center" Width="200">
+                      Grid.Row="4" Grid.Column="1" Margin="10" VerticalAlignment="Center" Width="200">
                         <ComboBoxItem Content="极低音量" Tag="x-soft"/>
                         <ComboBoxItem Content="较低音量" Tag="soft"/>
                         <ComboBoxItem Content="中等音量" Tag="medium"/>

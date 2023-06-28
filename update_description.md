@@ -4,5 +4,7 @@
 
 	2.语音播放改为异步播放
 
+	3.微软Key文本框改为密码模式
+
 	3.点歌机器地址：https://github.com/luiguangguan/DGJv3/releases
 
