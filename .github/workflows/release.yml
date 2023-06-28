@@ -148,7 +148,7 @@ jobs:
           body: |
             Auto-generated build
             [⭐Update⭐]
-            ${{ steps.get_update_description.outputs.update_description | printf "%s" }}
+            ${{ steps.get_update_description.outputs.update_description }}
           draft: false
           prerelease: false
 
