@@ -132,99 +132,102 @@ namespace MicrosoftTTS_DGJ_Plugin
         }
 
 
-        public override async void Speaking(string text)
+        public override Task Speaking(string text)
         {
-            try
-            {
-
-                Log($"收到语音文字：{text}");
-                var config = SpeechConfig.FromSubscription(subscriptionKey, subscriptionRegion);
-                // Note: the voice setting will not overwrite the voice element in input SSML.
-                //config.SpeechSynthesisVoiceName = "zh-CN-XiaoxiaoNeural";
-                // use the default speaker as audio output.
-
-                if (EnableProxy)
+            var task = Task.Run(async () => {
+                try
                 {
-                    if (Regex.IsMatch(ProxyServer, "^[\\w.-]+(:\\d+)?$") == false)
-                    {
-                        Log("代理服务器地址错误");
-                        return;
-                    }
-                    if (ProxyServerPort > 65535 || ProxyServerPort < 0)
-                    {
-                        Log("代理服务器端口范围错误，应在（0-65535）内");
-                        return;
-                    }
-                    if (string.IsNullOrEmpty(ProxyServerUser) && string.IsNullOrEmpty(ProxyServerPassword))
-                    { config.SetProxy(ProxyServer, ProxyServerPort); }
-                    else
-                    {
-                        config.SetProxy(ProxyServer, ProxyServerPort, ProxyServerUser, ProxyServerPassword);
-                    }
-                }
 
-                // 创建自定义的 AudioOutputFormat 实例
-                ////var outputFormat = Microsoft.CognitiveServices.Speech.Audio.AudioOutputFormat.CreateNonPCM();
+                    Log($"收到语音文字：{text}");
+                    var config = SpeechConfig.FromSubscription(subscriptionKey, subscriptionRegion);
+                    // Note: the voice setting will not overwrite the voice element in input SSML.
+                    //config.SpeechSynthesisVoiceName = "zh-CN-XiaoxiaoNeural";
+                    // use the default speaker as audio output.
 
-                //// 创建 SpeechSynthesizer 实例，并设置 AudioConfig
+                    if (EnableProxy)
+                    {
+                        if (Regex.IsMatch(ProxyServer, "^[\\w.-]+(:\\d+)?$") == false)
+                        {
+                            Log("代理服务器地址错误");
+                            return;
+                        }
+                        if (ProxyServerPort > 65535 || ProxyServerPort < 0)
+                        {
+                            Log("代理服务器端口范围错误，应在（0-65535）内");
+                            return;
+                        }
+                        if (string.IsNullOrEmpty(ProxyServerUser) && string.IsNullOrEmpty(ProxyServerPassword))
+                        { config.SetProxy(ProxyServer, ProxyServerPort); }
+                        else
+                        {
+                            config.SetProxy(ProxyServer, ProxyServerPort, ProxyServerUser, ProxyServerPassword);
+                        }
+                    }
 
-                //audioConfig.AudioProcessingOptions.
-                using (var synthesizer = new Microsoft.CognitiveServices.Speech.SpeechSynthesizer(config, null))
-                {
-                    //synthesizer.
-                    string mstts = $@"<speak version=""1.0"" xmlns=""http://www.w3.org/2001/10/synthesis""
+                    // 创建自定义的 AudioOutputFormat 实例
+                    ////var outputFormat = Microsoft.CognitiveServices.Speech.Audio.AudioOutputFormat.CreateNonPCM();
+
+                    //// 创建 SpeechSynthesizer 实例，并设置 AudioConfig
+
+                    //audioConfig.AudioProcessingOptions.
+                    using (var synthesizer = new Microsoft.CognitiveServices.Speech.SpeechSynthesizer(config, null))
+                    {
+                        //synthesizer.
+                        string mstts = $@"<speak version=""1.0"" xmlns=""http://www.w3.org/2001/10/synthesis""
        xmlns:mstts=""https://www.w3.org/2001/mstts"" xml:lang=""zh-CN"">
     <voice name=""{VoiceName}"">
         <mstts:express-as style=""{VoiceStyle}"" styledegree=""2"">
-        <prosody volume='{(string.IsNullOrEmpty(Volume) ? "medium" :Volume)}'>{text}</prosody>
+        <prosody volume='{(string.IsNullOrEmpty(Volume) ? "medium" : Volume)}'>{text}</prosody>
         </mstts:express-as>
     </voice>
 </speak>";
-                    //synthesizer.c
-                    //Log(mstts);
-                    synthesizer.SynthesisStarted += Synthesizer_SynthesisStarted;
-                    synthesizer.SynthesisCompleted += Synthesizer_SynthesisCompleted;
-                    synthesizer.SynthesisCanceled += Synthesizer_SynthesisCanceled;
-                    using (var result = await synthesizer.SpeakSsmlAsync(mstts))
-                    {
-                        //if (result.Reason == ResultReason.SynthesizingAudioCompleted)
-                        //{
-                        //    //using (var stream = new System.IO.MemoryStream(result.AudioData))
-                        //    //{
-                        //    //    // 创建一个 SoundPlayer 实例，并将音频数据流作为输入
-                        //    //    using (var player = new SoundPlayer(stream))
-                        //    //    {
-                        //    //        // 播放声音
-                        //    //        player.Play();
-                        //    //        Log($"已播放语音：{text}");
-                        //    //    }
-                        //    //}
-                        //    Log($"已播放语音：{text}");
-                        //    Log($"Speech synthesized for text [{text}]");
-                        //}
-                        //else if (result.Reason == ResultReason.Canceled)
-                        //{
-                        //    var cancellation = SpeechSynthesisCancellationDetails.FromResult(result);
-                        //    Log($"CANCELED: Reason={cancellation.Reason}");
+                        //synthesizer.c
+                        //Log(mstts);
+                        synthesizer.SynthesisStarted += Synthesizer_SynthesisStarted;
+                        synthesizer.SynthesisCompleted += Synthesizer_SynthesisCompleted;
+                        synthesizer.SynthesisCanceled += Synthesizer_SynthesisCanceled;
+                        using (var result =await synthesizer.SpeakSsmlAsync(mstts))
+                        {
+                            //if (result.Reason == ResultReason.SynthesizingAudioCompleted)
+                            //{
+                            //    //using (var stream = new System.IO.MemoryStream(result.AudioData))
+                            //    //{
+                            //    //    // 创建一个 SoundPlayer 实例，并将音频数据流作为输入
+                            //    //    using (var player = new SoundPlayer(stream))
+                            //    //    {
+                            //    //        // 播放声音
+                            //    //        player.Play();
+                            //    //        Log($"已播放语音：{text}");
+                            //    //    }
+                            //    //}
+                            //    Log($"已播放语音：{text}");
+                            //    Log($"Speech synthesized for text [{text}]");
+                            //}
+                            //else if (result.Reason == ResultReason.Canceled)
+                            //{
+                            //    var cancellation = SpeechSynthesisCancellationDetails.FromResult(result);
+                            //    Log($"CANCELED: Reason={cancellation.Reason}");
 
-                        //    if (cancellation.Reason == CancellationReason.Error)
-                        //    {
-                        //        Log($"CANCELED: ErrorCode={cancellation.ErrorCode}");
-                        //        Log($"CANCELED: ErrorDetails=[{cancellation.ErrorDetails}]");
-                        //        Log($"CANCELED: Did you update the subscription info?");
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    Log($"调用语音接口返回代码：[{result.Reason}]，{text}");
-                        //}
+                            //    if (cancellation.Reason == CancellationReason.Error)
+                            //    {
+                            //        Log($"CANCELED: ErrorCode={cancellation.ErrorCode}");
+                            //        Log($"CANCELED: ErrorDetails=[{cancellation.ErrorDetails}]");
+                            //        Log($"CANCELED: Did you update the subscription info?");
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    Log($"调用语音接口返回代码：[{result.Reason}]，{text}");
+                            //}
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Log("出错了", ex);
-            }
+                catch (Exception ex)
+                {
+                    Log("出错了", ex);
+                }
+            });
+            return task;
         }
 
         private void Synthesizer_SynthesisCanceled(object sender, SpeechSynthesisEventArgs e)
@@ -245,12 +248,20 @@ namespace MicrosoftTTS_DGJ_Plugin
             Log($"发音完成：{e.Result.ResultId}");
             using (var stream = new System.IO.MemoryStream(e.Result.AudioData))
             {
-                // 创建一个 SoundPlayer 实例，并将音频数据流作为输入
-                using (var player = new SoundPlayer(stream))
+
+                if (SpeechCompletedToPlay != null)
                 {
-                    // 播放声音
-                    player.Play();
-                    Log($"已播放语音{e.Result.ResultId}");
+                    SpeechCompletedToPlay?.Invoke(this, new SpeechCompletedEventArgs(stream));
+                }
+                else
+                {
+                    //创建一个 SoundPlayer 实例，并将音频数据流作为输入
+                    using (var player = new SoundPlayer(stream))
+                    {
+                        // 播放声音
+                        player.Play();
+                        Log($"已播放语音{e.Result.ResultId}");
+                    }
                 }
             }
         }
@@ -297,7 +308,9 @@ namespace MicrosoftTTS_DGJ_Plugin
             this.GetType().GetProperty("_log", BindingFlags.SetProperty | BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, logHandler);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public override event SpeechCompleted SpeechCompletedToPlay;
+        public override event PropertyChangedEventHandler PropertyChanged;
+
         protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;

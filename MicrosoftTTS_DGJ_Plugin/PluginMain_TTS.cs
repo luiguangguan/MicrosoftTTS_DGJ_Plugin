@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -41,7 +42,7 @@ namespace MicrosoftTTS_DGJ_Plugin
             this.PluginDesc = Utilities.PluginDesc;
             this.PluginVer = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
             base.Start();
-            //LoadAllReferencedAssemblies();
+            LoadAllReferencedAssemblies();
             versionChecker = new VersionChecker("MicrosoftTTS_DGJ_Plugin");
             Task.Run(() =>
             {
@@ -152,7 +153,7 @@ namespace MicrosoftTTS_DGJ_Plugin
 
                     _mainWindow.MicrosoftTTS.LogEvent += (object sender, LogEventArgs e) =>
                     {
-                        methodInfo?.Invoke(wtts,new object[] { $"{Utilities.PluginName}:{e.Message}", e.Exception});
+                        methodInfo?.Invoke(wtts, new object[] { $"{Utilities.PluginName}:{e.Message}", e.Exception });
                     };
                 }
                 TTSlist.Insert(TTSlist.Count - 1 > -1 ? TTSlist.Count - 1 : 0, _mainWindow.MicrosoftTTS);
@@ -183,7 +184,14 @@ namespace MicrosoftTTS_DGJ_Plugin
 
             using (Stream stream = executingAssembly.GetManifestResourceStream(path))
             {
-                if (stream == null) { return null; }
+                if (stream == null)
+                {
+                    if (File.Exists(filepath))
+                    {
+                        return Assembly.LoadFrom(filepath);
+                    }
+                    return null;
+                }
 
                 var assemblyRawBytes = new byte[stream.Length];
                 stream.Read(assemblyRawBytes, 0, assemblyRawBytes.Length);
@@ -197,52 +205,48 @@ namespace MicrosoftTTS_DGJ_Plugin
             return Assembly.LoadFrom(filepath);
         }
 
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern bool SetDllDirectory(string path);
+
         private static void LoadAllReferencedAssemblies()
-    {
-        Assembly executingAssembly = Assembly.GetExecutingAssembly();
-        AssemblyName[] referencedAssemblies = executingAssembly.GetReferencedAssemblies();
-
-        foreach (AssemblyName assemblyName in referencedAssemblies)
         {
+            string defaultSearchPath = $"{Environment.SystemDirectory};{Environment.CurrentDirectory}";
+            string specifiedSearchPath = Utilities.BinDirectoryPath;
+            string combinedSearchPath = $"{specifiedSearchPath};{defaultSearchPath}";
 
+            // 设置加载路径为合并后的搜索路径
+            SetDllDirectory(combinedSearchPath);
 
-                var path = assemblyName.Name + ".dll";
-                string filepath = Path.Combine(Utilities.BinDirectoryPath, path);
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string[] resourceNames = assembly.GetManifestResourceNames();
 
-                if (assemblyName.CultureInfo?.Equals(CultureInfo.InvariantCulture) == false)
+            var executingAssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+
+            foreach (string resourceName in resourceNames)
+            {
+                using (Stream resourceStream = assembly.GetManifestResourceStream(resourceName))
                 {
-                    path = string.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
-                }
 
-                using (Stream stream = executingAssembly.GetManifestResourceStream(path))
-                {
-                    if (stream == null) {
-                        continue;
-                    }
-
-                    var assemblyRawBytes = new byte[stream.Length];
-                    stream.Read(assemblyRawBytes, 0, assemblyRawBytes.Length);
-                    try
+                    if (resourceStream != null && resourceName.EndsWith(".dll"))
                     {
-                        File.WriteAllBytes(filepath, assemblyRawBytes);
+                        var prefix = $"{executingAssemblyName}.Reference.";
+                        int index = resourceName.IndexOf(prefix);
+                        string fileName = resourceName;
+                        if (index > -1)
+                        {
+                            fileName = Path.GetFileName(resourceName.Remove(index, prefix.Length));
+                            fileName = fileName.TrimStart('.');
+                        }
+                        string filePath = Path.Combine(Utilities.BinDirectoryPath, fileName);
+
+                        using (FileStream fileStream = File.Create(filePath))
+                        {
+                            resourceStream.CopyTo(fileStream);
+                        }
                     }
-                    catch (Exception) { }
                 }
+            }
 
-                Assembly.LoadFrom(filepath);
-
-
-            //    try
-            //{
-            //    Assembly.Load(assemblyName);
-            //    Console.WriteLine("Loaded assembly: " + assemblyName.FullName);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine("Failed to load assembly: " + assemblyName.FullName);
-            //    Console.WriteLine("Error: " + ex.Message);
-            //}
         }
-    }
     }
 }

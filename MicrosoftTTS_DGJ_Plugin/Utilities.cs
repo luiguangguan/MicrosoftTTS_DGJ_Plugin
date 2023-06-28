@@ -27,6 +27,6 @@ namespace MicrosoftTTS_DGJ_Plugin
         internal static readonly string PluginName = "微软TTS模块AI版插件For点歌姬";
         internal static readonly string PluginAuth = "Simon";
         internal static readonly string PluginCont = "请在github提issue";
-        internal static readonly string PluginDesc = "点歌姬AI发音用";
+        internal static readonly string PluginDesc = "点歌姬AI发音用(For点歌姬)";
     }
 }

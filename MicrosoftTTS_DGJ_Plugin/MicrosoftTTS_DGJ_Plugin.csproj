@@ -120,15 +120,23 @@
   <ItemGroup>
     <Content Include="Reference\BilibiliDM_PluginFramework.dll" />
     <Content Include="Reference\Bililive_dm.exe" />
+    <EmbeddedResource Include="Reference\Microsoft.CognitiveServices.Speech.core.dll" />
+    <EmbeddedResource Include="Reference\Microsoft.CognitiveServices.Speech.csharp.dll" />
+    <EmbeddedResource Include="Reference\Microsoft.CognitiveServices.Speech.csharp.xml" />
+    <EmbeddedResource Include="Reference\Microsoft.CognitiveServices.Speech.extension.audio.sys.dll" />
+    <EmbeddedResource Include="Reference\Microsoft.CognitiveServices.Speech.extension.codec.dll" />
+    <EmbeddedResource Include="Reference\Microsoft.CognitiveServices.Speech.extension.kws.dll" />
+    <EmbeddedResource Include="Reference\Microsoft.CognitiveServices.Speech.extension.lu.dll" />
+    <EmbeddedResource Include="Reference\Microsoft.CognitiveServices.Speech.extension.mas.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterResolveReferences">
+  <!--<Target Name="AfterResolveReferences">
     <ItemGroup>
       <EmbeddedResource Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.Extension)' == '.dll'">
         <LogicalName>%(ReferenceCopyLocalPaths.DestinationSubDirectory)%(ReferenceCopyLocalPaths.Filename)%(ReferenceCopyLocalPaths.Extension)</LogicalName>
       </EmbeddedResource>
     </ItemGroup>
-  </Target>
+  </Target>-->
   <Import Project="..\packages\Microsoft.CognitiveServices.Speech.1.29.0\build\net462\Microsoft.CognitiveServices.Speech.targets" Condition="Exists('..\packages\Microsoft.CognitiveServices.Speech.1.29.0\build\net462\Microsoft.CognitiveServices.Speech.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -136,4 +144,12 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CognitiveServices.Speech.1.29.0\build\net462\Microsoft.CognitiveServices.Speech.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CognitiveServices.Speech.1.29.0\build\net462\Microsoft.CognitiveServices.Speech.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>Powershell -Command "Write-Output (Get-Item -Path $(TargetPath)).VersionInfo.FileVersion | Out-File -FilePath $(SolutionDir)/VERSION"
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>
