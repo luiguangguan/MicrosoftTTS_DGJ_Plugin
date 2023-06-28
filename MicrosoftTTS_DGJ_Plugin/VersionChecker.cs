@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace MicrosoftTTS_DGJ_Plugin
 {
@@ -22,6 +23,8 @@ namespace MicrosoftTTS_DGJ_Plugin
         public const string DEFAULT_BASE_URL = "https://www.danmuji.org";
         public const string GITHUB_owner = "luiguangguan";
         public const string GITHUB_repo = "MicrosoftTTS_DGJ_Plugin";
+        public const string ProjName = "微软TTS模块AI版插件For点歌姬";
+
 
         /// <summary>
         /// API的路径
@@ -182,8 +185,8 @@ namespace MicrosoftTTS_DGJ_Plugin
                         string responseContent = response.Content.ReadAsStringAsync().Result;
                         JObject release = JsonConvert.DeserializeObject<JObject>(responseContent);
                         string releaseName = release.GetValue("name").Value<string>();
-                        this.Name = "点歌姬v3";
-                        this.Author = "Simon";
+                        this.Name = ProjName;
+                        this.Author = Utilities.PluginAuth;
                         this.Version = new Version(releaseName?.Replace("v", "")?.Replace("V", ""));
                         this.UpdateDateTime = release.GetValue("created_at").Value<DateTime>().ToLocalTime();
                         this.UpdateDescription = release.GetValue("body").Value<string>();
@@ -195,7 +198,7 @@ namespace MicrosoftTTS_DGJ_Plugin
                         {
                             foreach (var asset in assets)
                             {
-                                if (asset.Value<string>("name") == $"ExtendNetease_DGJModule_{releaseName?.Replace("v", "")?.Replace("V", "")}.zip")
+                                if (asset.Value<string>("name") == $"{Assembly.GetExecutingAssembly().GetName().Name}_{releaseName?.Replace("v", "")?.Replace("V", "")}.zip")
                                 {
                                     this.DownloadUrl = new Uri(asset.Value<string>("browser_download_url"));
                                     this.UpdateFileName = asset.Value<string>("name");

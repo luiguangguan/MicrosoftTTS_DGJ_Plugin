@@ -48,7 +48,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\Bililive_dm.exe</HintPath>
     </Reference>
-    <Reference Include="DGJv3, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DGJv3, Version=3.2.3.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\DGJv3.dll</HintPath>
     </Reference>
@@ -118,7 +118,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DGJv3.dll" />
     <Content Include="Reference\BilibiliDM_PluginFramework.dll" />
     <Content Include="Reference\Bililive_dm.exe" />
     <Content Include="Reference\DGJv3.dll" />
