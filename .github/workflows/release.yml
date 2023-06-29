@@ -58,7 +58,6 @@ jobs:
             console.log(`Release exists: ${releaseExists}`);
             //console.log(`::set-output name=release_exists::${releaseExists}`);
             console.log(`"release_exists=${releaseExists} >> $GITHUB_OUTPUT"`);
-			
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
