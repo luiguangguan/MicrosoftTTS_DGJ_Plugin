@@ -121,7 +121,7 @@ namespace MicrosoftTTS_DGJ_Plugin
             foreach (var role in RolesList)
             {
                 ComboBoxItem newItem1 = new ComboBoxItem();
-                newItem1.Content = $"{role.LocalName}({(role.Gender == "Female" ? "女" : "男")}{role.LocaleName})";
+                newItem1.Content = $"{role.LocalName}-{(role.Gender == "Female" ? "女" : "男")}-{role.LocaleName}";
                 newItem1.Tag = role.ShortName;
                 AiRoleComboBoxList.Add(newItem1);
                 if (role.ShortName == VoiceName)
