@@ -39,8 +39,9 @@ jobs:
               echo "⭐请设置VERSION文件"
           }
           $version = $version.Trim()
-          Write-Host "Version: $version"
-          Write-Host "version=$version" >> GITHUB_OUTPUT
+          echo "Version: $version"
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+
 
       #判断是否存在这个发布版本
       - name: Check if release exists
@@ -48,7 +49,7 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            const version = "v" + '${{ steps.get_version.outputs.version }}';
+            const version = "v${{ steps.get_version.outputs.version }}";
             const releases = await github.repos.listReleases({
               owner: context.repo.owner,
               repo: context.repo.repo
@@ -57,11 +58,10 @@ jobs:
             const releaseExists = releases.data.some(release => release.name === version);
             console.log(`Release exists: ${releaseExists}`);
             //console.log(`::set-output name=release_exists::${releaseExists}`);
-            console.log(`"release_exists=${releaseExists} >> $GITHUB_OUTPUT"`);
-			
+            //console.log(`"release_exists=${releaseExists} >> $env:GITHUB_OUTPUT"`);
+            core.setOutput('release_exists', releaseExists); 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
       #设置环版本境变量
       - name: Set APPVEYOR_BUILD_VERSION environ
