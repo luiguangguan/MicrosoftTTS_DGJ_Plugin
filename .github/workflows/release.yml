@@ -53,10 +53,12 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo
             });
-            //console.log(`当前版本号: ${version}`);
+            console.log(`当前版本号: ${version}`);
             const releaseExists = releases.data.some(release => release.name === version);
             console.log(`Release exists: ${releaseExists}`);
-            console.log(`::set-output name=release_exists::${releaseExists}`);
+            //console.log(`::set-output name=release_exists::${releaseExists}`);
+            console.log(`"release_exists=${releaseExists} >> $GITHUB_OUTPUT"`);
+			
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
