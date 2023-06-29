@@ -41,8 +41,7 @@ jobs:
           $version = $version.Trim()
           echo "Version: $version"
           echo "version=$version" >> $env:GITHUB_OUTPUT
-
-
+       
       #判断是否存在这个发布版本
       - name: Check if release exists
         id: check_release
@@ -57,12 +56,25 @@ jobs:
             console.log(`当前版本号: ${version}`);
             const releaseExists = releases.data.some(release => release.name === version);
             console.log(`Release exists: ${releaseExists}`);
-            //console.log(`::set-output name=release_exists::${releaseExists}`);
-            //console.log(`"release_exists=${releaseExists} >> $env:GITHUB_OUTPUT"`);
             core.setOutput('release_exists', releaseExists); 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      
+      ## 从文件获取更信息
+      # - name: Get update description
+      #   id: get_update_description
+      #   if: ${{ steps.check_release.outputs.release_exists == 'false' }}
+      #   run: |
+      #     try {
+      #       $desc = Get-Content -Raw -Path ./update_description.md
+      #       echo "描述信息↓↓↓"
+      #       echo $desc
+      #       echo "update_description=$desc" >> $env:GITHUB_OUTPUT
+      #     } catch {
+      #       $desc = ""
+      #       echo "⭐请设置update_description.md文件"
+      #     }
+      
       #设置环版本境变量
       - name: Set APPVEYOR_BUILD_VERSION environ
         if: ${{ steps.check_release.outputs.release_exists == 'false' }}
@@ -114,24 +126,8 @@ jobs:
       #  if: ${{ steps.check_release.outputs.release_exists == 'false' }}
       #  run: |
       #    git log -1 --pretty=format:"%b" > commit_message.txt
-      #    echo "commit_message=$(cat commit_message.txt)" >> GITHUB_OUTPUT
+      #    echo "commit_message=$(cat commit_message.txt)" >> env:GITHUB_OUTPUT
       
-      - name: Get update description
-        id: get_update_description
-        if: ${{ steps.check_release.outputs.release_exists == 'false' }}
-        run: |
-          try {
-            $desc = Get-Content -Raw -Path ./update_description.md
-            Write-Host "update_description=$desc" >> GITHUB_OUTPUT
-          } catch {
-            $desc = ""
-            echo "
-            ⭐
-            请设置update_description.md文件"
-          }
-
-
-
       #创建发布
       - name: Create Release
         if: ${{ steps.check_release.outputs.release_exists == 'false' }}
@@ -145,14 +141,15 @@ jobs:
           #release_name: Release 1.0.0
           #draft: false
           #prerelease: false
+          # ${{ steps.get_update_description.outputs.update_description }}
           tag_name: v${{ steps.get_version.outputs.version }}
           release_name: v${{ steps.get_version.outputs.version }}
-          body: |
-            Auto-generated build
-            [⭐Update⭐]
-            ${{ steps.get_update_description.outputs.update_description }}
           draft: false
           prerelease: false
+          body_path: ${{ github.workspace }}/update_description.md
+          # Auto-generated build
+          #   [⭐Update⭐]
+          #   $${{ steps.get_update_description.outputs.update_description }}
 
       #- name: Publish
       #  run: dotnet publish --configuration Release --output publish
