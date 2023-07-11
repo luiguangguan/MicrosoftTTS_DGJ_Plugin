@@ -158,7 +158,7 @@ namespace MicrosoftTTS_DGJ_Plugin
                 }
                 TTSlist.Insert(TTSlist.Count - 1 > -1 ? TTSlist.Count - 1 : 0, _mainWindow.MicrosoftTTS);
             }
-            catch (DllNotFoundException)
+            catch (DllNotFoundException ex)
             {
                 throw;
             }
