@@ -143,7 +143,7 @@ namespace MicrosoftTTS_DGJ_Plugin
                 {
                     dgjWindow = e.Types.FirstOrDefault(p => p.Name == "DGJMain").GetField("window", BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(dgjPlugin);
                 }
-                ObservableCollection<TTS> TTSlist = (ObservableCollection<TTS>)dgjWindow.GetType().GetProperty("TTSlist", BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public).GetValue(dgjWindow);
+                object TTSPlugin = dgjWindow.GetType().GetProperty("TTSPlugin", BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public).GetValue(dgjWindow);
 
                 var wtts = (WindowsTTS)dgjWindow.GetType().GetProperty("WindowsTTS", BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public).GetValue(dgjWindow);
                 if (wtts != null)
@@ -156,7 +156,18 @@ namespace MicrosoftTTS_DGJ_Plugin
                         methodInfo?.Invoke(wtts, new object[] { $"{Utilities.PluginName}:{e.Message}", e.Exception });
                     };
                 }
-                TTSlist.Insert(TTSlist.Count - 1 > -1 ? TTSlist.Count - 1 : 0, _mainWindow.MicrosoftTTS);
+                MethodInfo methodInfo2 = TTSPlugin.GetType().GetMethod("AddModule", BindingFlags.Instance | BindingFlags.Public);
+                if (methodInfo2 != null)
+                {
+                    //单线程加入插件模块
+                    methodInfo2.Invoke(TTSPlugin, new object[] { _mainWindow.MicrosoftTTS });
+                }
+                else
+                {
+                    //兼容旧的方法
+                ObservableCollection<TTS> TTSlist = (ObservableCollection<TTS>)dgjWindow.GetType().GetProperty("TTSlist", BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public).GetValue(dgjWindow);
+                    TTSlist.Insert(TTSlist.Count - 1 > -1 ? TTSlist.Count - 1 : 0, _mainWindow.MicrosoftTTS);
+                }
             }
             catch (DllNotFoundException ex)
             {
