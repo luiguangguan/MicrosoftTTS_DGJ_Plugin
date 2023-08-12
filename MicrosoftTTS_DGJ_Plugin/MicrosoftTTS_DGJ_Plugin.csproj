@@ -78,6 +78,7 @@
     <Compile Include="AiVoiceStyleIndex.cs" />
     <Compile Include="BindablePasswordBox.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="DanmuHandler.cs" />
     <Compile Include="MicrosoftTTS.cs" />
     <Compile Include="PasswordHelper.cs" />
     <Compile Include="UniversalCommand.cs" />

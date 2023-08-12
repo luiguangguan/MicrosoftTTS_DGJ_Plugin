@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MicrosoftTTS_DGJ_Plugin"
         mc:Ignorable="d"
-        Title="微软AI语音插件for点歌姬" Height="619" Width="800">
+        Title="微软AI语音插件for点歌姬" Height="682" Width="800">
     <Grid>
         <Grid  >
             <Grid.RowDefinitions>
@@ -86,7 +86,24 @@
                     </ComboBox>
                 </Grid>
             </GroupBox>
-            <GroupBox Grid.Row="1" Margin="10" Header="代理设置">
+            <GroupBox Grid.Row="1" Margin="10" Header="TTS语音设置">
+                <Grid  >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="1" Grid.Column="0"  Text="开启弹幕朗读" Margin="10" VerticalAlignment="Center"/>
+                    <CheckBox IsChecked="{Binding DanmuHandler.BiliComentSpeech}" Grid.Row="1" Grid.Column="1" Margin="10" VerticalAlignment="Center" Width="200"></CheckBox>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Grid.Row="2" Margin="10" Header="代理设置">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -115,9 +132,9 @@
                     </StackPanel>
                 </Grid>
             </GroupBox>
-            
-            
-            <StackPanel Orientation="Horizontal" Grid.Row="2">
+
+
+            <StackPanel Orientation="Horizontal" Grid.Row="3">
                 <TextBox Text="{Binding TestText, Mode=TwoWay}" Margin="90,10,10,10"  Width="250"/>
                 <Button Click="Button_Click" Width="200" Margin="10" Content="测试（试听）"/>
             </StackPanel>

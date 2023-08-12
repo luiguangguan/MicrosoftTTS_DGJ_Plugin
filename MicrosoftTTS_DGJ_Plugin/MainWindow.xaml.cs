@@ -32,23 +32,30 @@ namespace MicrosoftTTS_DGJ_Plugin
         public string TestText { get; set; } = "语音测试，今天天气还不错哦~";
         public ObservableCollection<AiRoles> AiRoleList { get; set; }
 
+        private PluginMain_TTS PluginMain_TTS { get; set; }
 
-        public MainWindow()
+        public DanmuHandler DanmuHandler { get; set; }
+
+
+        public MainWindow(PluginMain_TTS pluginMain_TTS)
         {
-            
+
             InitializeComponent();
 
             AiRoleList = new ObservableCollection<AiRoles>();
             MicrosoftTTS = new MicrosoftTTS(Utilities.PluginName, Utilities.PluginAuth, Utilities.PluginCont, AiRoleList);
+            PluginMain_TTS = pluginMain_TTS;
+            TestSpeakingCommand = new UniversalCommand(TestSpeakingClick);
+            DanmuHandler = new DanmuHandler(MicrosoftTTS);
+            DataContext = this;
+
             ApplyConfig(Config.Load());
             InitAiRoles();
 
-            TestSpeakingCommand = new UniversalCommand(TestSpeakingClick);
-            DataContext = this;
-
             this.Closing += MainWindow_Closing;
+            PluginMain_TTS.ReceivedDanmaku += (sender, e) => { DanmuHandler.ProcessDanmu(e.Danmaku); };
         }
-       
+
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             e.Cancel = true;
@@ -76,6 +83,7 @@ namespace MicrosoftTTS_DGJ_Plugin
             MicrosoftTTS.ProxyServerUser = config.proxyServerUser;
             MicrosoftTTS.ProxyServerPassword = config.proxyServerPassword;
             MicrosoftTTS.Volume = config.volume;
+            DanmuHandler.BiliComentSpeech = config.BiliComentSpeech;
         }
         private void TestSpeakingClick(object parameter)
         {
@@ -103,6 +111,7 @@ namespace MicrosoftTTS_DGJ_Plugin
             proxyServerUser = MicrosoftTTS.ProxyServerUser,
             proxyServerPassword = MicrosoftTTS.ProxyServerPassword,
             volume = MicrosoftTTS.Volume,
+            BiliComentSpeech = DanmuHandler.BiliComentSpeech,
         };
 
         internal void DeInit()
@@ -115,7 +124,7 @@ namespace MicrosoftTTS_DGJ_Plugin
         {
             AiRoleList.Clear();
             var roles = AiRoles.Load();
-            roles= roles.OrderBy(p=>p.Name).ToArray();
+            roles = roles.OrderBy(p => p.Name).ToArray();
             if (roles != null)
             {
                 foreach (var role in roles)
