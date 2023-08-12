@@ -81,7 +81,7 @@ namespace MicrosoftTTS_DGJ_Plugin
         {
             try
             {
-                _mainWindow = new MainWindow();
+                _mainWindow = new MainWindow(this);
                 InjectDGJ();
             }
             catch (DllNotFoundException)

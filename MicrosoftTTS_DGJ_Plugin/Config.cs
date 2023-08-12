@@ -39,6 +39,9 @@ namespace MicrosoftTTS_DGJ_Plugin
         [JsonProperty("volume")]
         public string volume { get; set; } = "medium";
 
+        [JsonProperty("biliComentSpeech")]
+        public bool BiliComentSpeech { get; set; } = false;
+
         internal static Config Load(bool reset = false)
         {
             Config config = new Config();
