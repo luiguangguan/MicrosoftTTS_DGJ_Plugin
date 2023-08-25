@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MicrosoftTTS_DGJ_Plugin
 {
-    internal class UniversalCommand : ICommand
+    public class UniversalCommand : ICommand
     {
         private Func<object, bool> _canExecute = null;
 

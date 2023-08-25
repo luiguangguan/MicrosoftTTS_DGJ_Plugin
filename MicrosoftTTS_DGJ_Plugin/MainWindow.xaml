@@ -97,9 +97,12 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Row="1" Grid.Column="0"  Text="开启弹幕朗读" Margin="10" VerticalAlignment="Center"/>
                     <CheckBox IsChecked="{Binding DanmuHandler.BiliComentSpeech}" Grid.Row="1" Grid.Column="1" Margin="10" VerticalAlignment="Center" Width="200"></CheckBox>
+                    <TextBlock Grid.Row="1" Grid.Column="2"  Text="使用系统内置TTS (不使用AI)" Margin="10" VerticalAlignment="Center"/>
+                    <CheckBox IsChecked="{Binding MicrosoftTTS.UseWinTts}" Grid.Row="1" Grid.Column="3" Margin="10" VerticalAlignment="Center" Width="200"></CheckBox>
                 </Grid>
             </GroupBox>
 

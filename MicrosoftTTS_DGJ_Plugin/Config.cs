@@ -42,6 +42,9 @@ namespace MicrosoftTTS_DGJ_Plugin
         [JsonProperty("biliComentSpeech")]
         public bool BiliComentSpeech { get; set; } = false;
 
+        [JsonProperty("UseWinTts")]
+        public bool UseWinTts { get; set; }=false;
+
         internal static Config Load(bool reset = false)
         {
             Config config = new Config();

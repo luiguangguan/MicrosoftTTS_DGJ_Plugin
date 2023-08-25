@@ -8,10 +8,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.ComTypes;
+using System.Speech.Synthesis;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -56,6 +59,12 @@ namespace MicrosoftTTS_DGJ_Plugin
             set => SetField(ref _enableProxy, value, nameof(EnableProxy));
         }
 
+        private bool _useWinTts = false;
+        public bool UseWinTts
+        {
+            get => _useWinTts;
+            set => SetField(ref _useWinTts, value, nameof(UseWinTts));
+        }
         private string _proxyServer = "http://example.com";
         public string ProxyServer
         {
@@ -85,6 +94,7 @@ namespace MicrosoftTTS_DGJ_Plugin
         }
 
         private string _volume;
+
         public string Volume
         {
             get => _volume;
@@ -134,7 +144,12 @@ namespace MicrosoftTTS_DGJ_Plugin
 
         public override Task Speaking(string text)
         {
-            var task = Task.Run(async () => {
+            if (UseWinTts)
+            {
+                return WinSpeaking(text);
+            }
+            var task = Task.Run(async () =>
+            {
                 try
                 {
 
@@ -186,7 +201,7 @@ namespace MicrosoftTTS_DGJ_Plugin
                         synthesizer.SynthesisStarted += Synthesizer_SynthesisStarted;
                         synthesizer.SynthesisCompleted += Synthesizer_SynthesisCompleted;
                         synthesizer.SynthesisCanceled += Synthesizer_SynthesisCanceled;
-                        using (var result =await synthesizer.SpeakSsmlAsync(mstts))
+                        using (var result = await synthesizer.SpeakSsmlAsync(mstts))
                         {
                             //if (result.Reason == ResultReason.SynthesizingAudioCompleted)
                             //{
@@ -306,6 +321,61 @@ namespace MicrosoftTTS_DGJ_Plugin
         public void SetLogHandler(Action<string> logHandler)
         {
             this.GetType().GetProperty("_log", BindingFlags.SetProperty | BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, logHandler);
+        }
+
+        public Task WinSpeaking(string text)
+        {
+            var task = Task.Run(() =>
+            {
+                try
+                {
+
+                    using (System.Speech.Synthesis.SpeechSynthesizer synthesizer = new System.Speech.Synthesis.SpeechSynthesizer())
+                    {
+                        //    // 设置语音的名称
+                        synthesizer.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Adult);
+
+                        // 设置输出格式为16kHz 16bit Mono PCM
+                        using (MemoryStream outputStream = new MemoryStream())
+                        {
+
+                            //synthesizer.SetOutputToAudioStream(outputStream,new SpeechAudioFormatInfo(44100, AudioBitsPerSample.Sixteen, AudioChannel.Stereo));
+                            synthesizer.SetOutputToWaveStream(outputStream);
+                            // 合成语音
+                            synthesizer.Speak(text);
+                            synthesizer.SetOutputToNull(); // 关闭输出流
+
+
+                            // 获取合成的音频字节流
+                            using (outputStream)
+                            {
+                                outputStream.Position = 0;
+                                if (SpeechCompletedToPlay != null)
+                                {
+                                    SpeechCompletedToPlay?.Invoke(this, new SpeechCompletedEventArgs(outputStream));
+                                }
+                                else
+                                {
+                                    //创建一个 SoundPlayer 实例，并将音频数据流作为输入
+                                    using (var player = new SoundPlayer(outputStream))
+                                    {
+                                        // 播放声音
+                                        player.Play();
+                                    }
+                                }
+                                Log($"已播放语音{text}");
+                            }
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Log("WindowsTTS出错了", ex);
+                }
+            });
+
+            return task;
         }
 
         public override event SpeechCompleted SpeechCompletedToPlay;

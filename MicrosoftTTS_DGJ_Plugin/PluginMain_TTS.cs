@@ -107,11 +107,14 @@ namespace MicrosoftTTS_DGJ_Plugin
             _mainWindow.Activate();
             if (string.IsNullOrEmpty(DownloadUpdateUrl) == false)
             {
-                if (MessageBox.Show("微软TTS插件For点歌姬发现新版本，是否前往下载", "版本更新", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes) == MessageBoxResult.Yes)
-                {
-                    Process.Start(versionChecker.UpdatePage.AbsoluteUri);
-                }
+                //if (MessageBox.Show("微软TTS插件For点歌姬发现新版本，是否前往下载", "版本更新", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes) == MessageBoxResult.Yes)
+                //{
+                //    Process.Start(versionChecker.UpdatePage.AbsoluteUri);
+                //}
                 DownloadUpdateUrl = "";
+                Update update = new Update(versionChecker);
+                update.Title = "版本更新";
+                update.ShowDialog();
             }
         }
 

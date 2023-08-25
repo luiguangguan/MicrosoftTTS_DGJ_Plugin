@@ -84,6 +84,7 @@ namespace MicrosoftTTS_DGJ_Plugin
             MicrosoftTTS.ProxyServerPassword = config.proxyServerPassword;
             MicrosoftTTS.Volume = config.volume;
             DanmuHandler.BiliComentSpeech = config.BiliComentSpeech;
+            MicrosoftTTS.UseWinTts = config.UseWinTts;
         }
         private void TestSpeakingClick(object parameter)
         {
@@ -112,6 +113,7 @@ namespace MicrosoftTTS_DGJ_Plugin
             proxyServerPassword = MicrosoftTTS.ProxyServerPassword,
             volume = MicrosoftTTS.Volume,
             BiliComentSpeech = DanmuHandler.BiliComentSpeech,
+            UseWinTts = MicrosoftTTS.UseWinTts,
         };
 
         internal void DeInit()
