@@ -24,6 +24,16 @@ namespace MicrosoftTTS_DGJ_Plugin
 {
     public class MicrosoftTTS : TTS, INotifyPropertyChanged
     {
+
+        private static readonly string locker = Guid.NewGuid().ToString();
+
+        private long _characterCount;
+        public long CharacterCount
+        {
+            get => _characterCount;
+            set => SetField(ref _characterCount, value, nameof(CharacterCount));
+        }
+
         private string _subscriptionKey;
         public string subscriptionKey
         {
@@ -144,6 +154,13 @@ namespace MicrosoftTTS_DGJ_Plugin
 
         public override Task Speaking(string text)
         {
+            lock (locker)
+            {
+                if (text != null)
+                {
+                    CharacterCount += text.Length;
+                }
+            }
             if (UseWinTts)
             {
                 return WinSpeaking(text);

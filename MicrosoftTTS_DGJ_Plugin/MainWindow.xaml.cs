@@ -85,6 +85,8 @@ namespace MicrosoftTTS_DGJ_Plugin
             MicrosoftTTS.Volume = config.volume;
             DanmuHandler.BiliComentSpeech = config.BiliComentSpeech;
             MicrosoftTTS.UseWinTts = config.UseWinTts;
+            MicrosoftTTS.CharacterCount = config.CharacterCount;
+
         }
         private void TestSpeakingClick(object parameter)
         {
@@ -114,6 +116,7 @@ namespace MicrosoftTTS_DGJ_Plugin
             volume = MicrosoftTTS.Volume,
             BiliComentSpeech = DanmuHandler.BiliComentSpeech,
             UseWinTts = MicrosoftTTS.UseWinTts,
+            CharacterCount = MicrosoftTTS.CharacterCount,
         };
 
         internal void DeInit()
@@ -151,6 +154,11 @@ namespace MicrosoftTTS_DGJ_Plugin
             catch (Exception ex)
             {
             }
+        }
+
+        private void btn_ClearTTSCharacterCount(object sender, RoutedEventArgs e)
+        {
+            MicrosoftTTS.CharacterCount = 0;
         }
     }
 }

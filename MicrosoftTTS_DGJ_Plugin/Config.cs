@@ -11,7 +11,7 @@ namespace MicrosoftTTS_DGJ_Plugin
 {
     public class Config
     {
-       
+
         [JsonProperty("MsKey")]
         public string subscriptionKey { get; set; }
         [JsonProperty("MsRegion")]
@@ -25,7 +25,7 @@ namespace MicrosoftTTS_DGJ_Plugin
         public bool enableProxy { get; set; } = false;
 
         [JsonProperty("proxyServer")]
-        public string proxyServer { get; set; }="example.com";
+        public string proxyServer { get; set; } = "example.com";
 
         [JsonProperty("proxyServerPort")]
         public int proxyServerPort { get; set; } = 7070;
@@ -43,7 +43,10 @@ namespace MicrosoftTTS_DGJ_Plugin
         public bool BiliComentSpeech { get; set; } = false;
 
         [JsonProperty("UseWinTts")]
-        public bool UseWinTts { get; set; }=false;
+        public bool UseWinTts { get; set; } = false;
+
+        [JsonProperty("CharacterCount")]
+        public long CharacterCount { get; set; } = 0;
 
         internal static Config Load(bool reset = false)
         {

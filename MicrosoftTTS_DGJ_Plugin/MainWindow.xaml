@@ -22,6 +22,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -84,6 +85,9 @@
                         <ComboBoxItem Content="较高音量" Tag="loud"/>
                         <ComboBoxItem Content="非常高音量" Tag="x-loud"/>
                     </ComboBox>
+                    <TextBlock Grid.Row="5"  Grid.Column="0" Text="TTS已发音字数:" Margin="10" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="5"  Grid.Column="1" Text="{Binding MicrosoftTTS.CharacterCount}" Margin="10" VerticalAlignment="Center"/>
+                    <Button Height="30" Width="40" Grid.Row="5" Grid.Column="2" HorizontalAlignment="Left" Click="btn_ClearTTSCharacterCount" >清零</Button>
                 </Grid>
             </GroupBox>
             <GroupBox Grid.Row="1" Margin="10" Header="TTS语音设置">
@@ -114,10 +118,14 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <StackPanel Margin="10,10,10,10" Grid.Row="0" Orientation="Horizontal">
                         <CheckBox IsChecked="{Binding MicrosoftTTS.EnableProxy}" Grid.Row="4"  Margin="10,10,10,10" >开启代理</CheckBox>
                     </StackPanel>
-                    <StackPanel Margin="10,10,10,10" Grid.Row="1" Orientation="Horizontal">
+                    <StackPanel Margin="10,10,10,10" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
                         <TextBlock Text="服务器地址" Margin="10,10,10,10"/>
                         <TextBox Text="{Binding MicrosoftTTS.ProxyServer}" Width="220" ToolTip="输入代理服务器地址，如：example.com" Margin="10,10,10,10"/>
                         <TextBlock Text="端口" Margin="10,10,10,10"/>
@@ -129,7 +137,7 @@
                         <TextBox  Text="{Binding MicrosoftTTS.ProxyServerUser}" ToolTip="如果代理服务器需要用户验证，请填写用户" Width="198" Margin="10,10,10,10"/>
                     </StackPanel>
 
-                    <StackPanel Margin="10,10,10,10" Grid.Row="3" Orientation="Horizontal">
+                    <StackPanel Margin="10,10,10,10" Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
                         <TextBlock Text="密码" Margin="10,10,10,10"/>
                         <TextBox Text="{Binding MicrosoftTTS.ProxyServerPassword}" ToolTip="如果代理服务器需要密码验证，请填写密码" Width="194" Margin="20,10,10,10"/>
                     </StackPanel>
