@@ -158,7 +158,9 @@ namespace MicrosoftTTS_DGJ_Plugin
 
         private void btn_ClearTTSCharacterCount(object sender, RoutedEventArgs e)
         {
-            MicrosoftTTS.CharacterCount = 0;
+            var result = MessageBox.Show("确定清零计数吗", "提示", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+                MicrosoftTTS.CharacterCount = 0;
         }
     }
 }
