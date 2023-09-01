@@ -342,57 +342,61 @@ namespace MicrosoftTTS_DGJ_Plugin
 
         public Task WinSpeaking(string text)
         {
+
             var task = Task.Run(() =>
-            {
-                try
                 {
-
-                    using (System.Speech.Synthesis.SpeechSynthesizer synthesizer = new System.Speech.Synthesis.SpeechSynthesizer())
+                    try
                     {
-                        //    // 设置语音的名称
-                        synthesizer.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Adult);
-
-                        // 设置输出格式为16kHz 16bit Mono PCM
-                        using (MemoryStream outputStream = new MemoryStream())
+                        if (!string.IsNullOrEmpty(text))
                         {
-
-                            //synthesizer.SetOutputToAudioStream(outputStream,new SpeechAudioFormatInfo(44100, AudioBitsPerSample.Sixteen, AudioChannel.Stereo));
-                            synthesizer.SetOutputToWaveStream(outputStream);
-                            // 合成语音
-                            synthesizer.Speak(text);
-                            synthesizer.SetOutputToNull(); // 关闭输出流
-
-
-                            // 获取合成的音频字节流
-                            using (outputStream)
+                            using (System.Speech.Synthesis.SpeechSynthesizer synthesizer = new System.Speech.Synthesis.SpeechSynthesizer())
                             {
-                                outputStream.Position = 0;
-                                if (SpeechCompletedToPlay != null)
+                                //    // 设置语音的名称
+                                synthesizer.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Adult);
+
+                                // 设置输出格式为16kHz 16bit Mono PCM
+                                using (MemoryStream outputStream = new MemoryStream())
                                 {
-                                    SpeechCompletedToPlay?.Invoke(this, new SpeechCompletedEventArgs(outputStream));
-                                }
-                                else
-                                {
-                                    //创建一个 SoundPlayer 实例，并将音频数据流作为输入
-                                    using (var player = new SoundPlayer(outputStream))
+
+                                    //synthesizer.SetOutputToAudioStream(outputStream,new SpeechAudioFormatInfo(44100, AudioBitsPerSample.Sixteen, AudioChannel.Stereo));
+                                    synthesizer.SetOutputToWaveStream(outputStream);
+                                    // 合成语音
+                                    synthesizer.Speak(text);
+                                    synthesizer.SetOutputToNull(); // 关闭输出流
+
+
+                                    // 获取合成的音频字节流
+                                    using (outputStream)
                                     {
-                                        // 播放声音
-                                        player.Play();
+                                        outputStream.Position = 0;
+                                        if (SpeechCompletedToPlay != null)
+                                        {
+                                            SpeechCompletedToPlay?.Invoke(this, new SpeechCompletedEventArgs(outputStream));
+                                        }
+                                        else
+                                        {
+                                            //创建一个 SoundPlayer 实例，并将音频数据流作为输入
+                                            using (var player = new SoundPlayer(outputStream))
+                                            {
+                                                // 播放声音
+                                                player.Play();
+                                            }
+                                        }
+                                        Log($"已播放语音{text}");
                                     }
                                 }
-                                Log($"已播放语音{text}");
                             }
+
                         }
                     }
 
-                }
-                catch (Exception ex)
-                {
-                    Log("WindowsTTS出错了", ex);
-                }
-            });
-
+                    catch (Exception ex)
+                    {
+                        Log("WindowsTTS出错了", ex);
+                    }
+                });
             return task;
+
         }
 
         public override event SpeechCompleted SpeechCompletedToPlay;
