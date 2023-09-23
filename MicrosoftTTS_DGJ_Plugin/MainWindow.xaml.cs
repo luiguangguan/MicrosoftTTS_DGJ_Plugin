@@ -86,6 +86,7 @@ namespace MicrosoftTTS_DGJ_Plugin
             DanmuHandler.BiliComentSpeech = config.BiliComentSpeech;
             MicrosoftTTS.UseWinTts = config.UseWinTts;
             MicrosoftTTS.CharacterCount = config.CharacterCount;
+            MicrosoftTTS.UseSampleMode = config.UseSampleMode;
 
         }
         private void TestSpeakingClick(object parameter)
@@ -117,6 +118,7 @@ namespace MicrosoftTTS_DGJ_Plugin
             BiliComentSpeech = DanmuHandler.BiliComentSpeech,
             UseWinTts = MicrosoftTTS.UseWinTts,
             CharacterCount = MicrosoftTTS.CharacterCount,
+            UseSampleMode = MicrosoftTTS.UseSampleMode,
         };
 
         internal void DeInit()

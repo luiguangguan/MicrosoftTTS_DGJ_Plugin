@@ -45,6 +45,9 @@ namespace MicrosoftTTS_DGJ_Plugin
         [JsonProperty("UseWinTts")]
         public bool UseWinTts { get; set; } = false;
 
+        [JsonProperty("UseSampleMode")]
+        public bool UseSampleMode { get; set; } = true;
+
         [JsonProperty("CharacterCount")]
         public long CharacterCount { get; set; } = 0;
 

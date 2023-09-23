@@ -111,6 +111,13 @@ namespace MicrosoftTTS_DGJ_Plugin
             set => SetField(ref _volume, value, nameof(Volume));
         }
 
+        private bool _UseSampleMode = false;
+        public bool UseSampleMode
+        {
+            get => _UseSampleMode;
+            set => SetField(ref _UseSampleMode, value, nameof(UseSampleMode));
+        }
+
         private ObservableCollection<AiRoles> RolesList { get; set; }
         public ObservableCollection<ComboBoxItem> AiVoiceStyleComboBoxList { get; set; }
         public ObservableCollection<ComboBoxItem> AiRoleComboBoxList { get; set; }
@@ -202,6 +209,10 @@ namespace MicrosoftTTS_DGJ_Plugin
                     //// 创建 SpeechSynthesizer 实例，并设置 AudioConfig
 
                     //audioConfig.AudioProcessingOptions.
+                    if (UseSampleMode)
+                    {
+                        config.SpeechSynthesisVoiceName = VoiceName;
+                    }
                     using (var synthesizer = new Microsoft.CognitiveServices.Speech.SpeechSynthesizer(config, null))
                     {
                         //synthesizer.
@@ -213,44 +224,62 @@ namespace MicrosoftTTS_DGJ_Plugin
         </mstts:express-as>
     </voice>
 </speak>";
+                        lock (locker)
+                        {
+                            if (text != null)
+                            {
+                                CharacterCount -= text.Length;
+                                CharacterCount += mstts.Length;
+                            }
+                        }
                         //synthesizer.c
                         //Log(mstts);
                         synthesizer.SynthesisStarted += Synthesizer_SynthesisStarted;
                         synthesizer.SynthesisCompleted += Synthesizer_SynthesisCompleted;
                         synthesizer.SynthesisCanceled += Synthesizer_SynthesisCanceled;
-                        using (var result = await synthesizer.SpeakSsmlAsync(mstts))
+                        if (UseSampleMode)
                         {
-                            //if (result.Reason == ResultReason.SynthesizingAudioCompleted)
-                            //{
-                            //    //using (var stream = new System.IO.MemoryStream(result.AudioData))
-                            //    //{
-                            //    //    // 创建一个 SoundPlayer 实例，并将音频数据流作为输入
-                            //    //    using (var player = new SoundPlayer(stream))
-                            //    //    {
-                            //    //        // 播放声音
-                            //    //        player.Play();
-                            //    //        Log($"已播放语音：{text}");
-                            //    //    }
-                            //    //}
-                            //    Log($"已播放语音：{text}");
-                            //    Log($"Speech synthesized for text [{text}]");
-                            //}
-                            //else if (result.Reason == ResultReason.Canceled)
-                            //{
-                            //    var cancellation = SpeechSynthesisCancellationDetails.FromResult(result);
-                            //    Log($"CANCELED: Reason={cancellation.Reason}");
+                            using (var result = await synthesizer.SpeakTextAsync(text))
+                            {
 
-                            //    if (cancellation.Reason == CancellationReason.Error)
-                            //    {
-                            //        Log($"CANCELED: ErrorCode={cancellation.ErrorCode}");
-                            //        Log($"CANCELED: ErrorDetails=[{cancellation.ErrorDetails}]");
-                            //        Log($"CANCELED: Did you update the subscription info?");
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    Log($"调用语音接口返回代码：[{result.Reason}]，{text}");
-                            //}
+                            }
+                        }
+                        else
+                        {
+                            using (var result = await synthesizer.SpeakSsmlAsync(mstts))
+                            {
+                                //if (result.Reason == ResultReason.SynthesizingAudioCompleted)
+                                //{
+                                //    //using (var stream = new System.IO.MemoryStream(result.AudioData))
+                                //    //{
+                                //    //    // 创建一个 SoundPlayer 实例，并将音频数据流作为输入
+                                //    //    using (var player = new SoundPlayer(stream))
+                                //    //    {
+                                //    //        // 播放声音
+                                //    //        player.Play();
+                                //    //        Log($"已播放语音：{text}");
+                                //    //    }
+                                //    //}
+                                //    Log($"已播放语音：{text}");
+                                //    Log($"Speech synthesized for text [{text}]");
+                                //}
+                                //else if (result.Reason == ResultReason.Canceled)
+                                //{
+                                //    var cancellation = SpeechSynthesisCancellationDetails.FromResult(result);
+                                //    Log($"CANCELED: Reason={cancellation.Reason}");
+
+                                //    if (cancellation.Reason == CancellationReason.Error)
+                                //    {
+                                //        Log($"CANCELED: ErrorCode={cancellation.ErrorCode}");
+                                //        Log($"CANCELED: ErrorDetails=[{cancellation.ErrorDetails}]");
+                                //        Log($"CANCELED: Did you update the subscription info?");
+                                //    }
+                                //}
+                                //else
+                                //{
+                                //    Log($"调用语音接口返回代码：[{result.Reason}]，{text}");
+                                //}
+                            }
                         }
                     }
                 }
