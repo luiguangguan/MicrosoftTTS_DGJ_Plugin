@@ -224,14 +224,7 @@ namespace MicrosoftTTS_DGJ_Plugin
         </mstts:express-as>
     </voice>
 </speak>";
-                        lock (locker)
-                        {
-                            if (text != null)
-                            {
-                                CharacterCount -= text.Length;
-                                CharacterCount += mstts.Length;
-                            }
-                        }
+
                         //synthesizer.c
                         //Log(mstts);
                         synthesizer.SynthesisStarted += Synthesizer_SynthesisStarted;
@@ -246,6 +239,14 @@ namespace MicrosoftTTS_DGJ_Plugin
                         }
                         else
                         {
+                            lock (locker)
+                            {
+                                if (text != null)
+                                {
+                                    CharacterCount -= text.Length;
+                                    CharacterCount += mstts.Length;
+                                }
+                            }
                             using (var result = await synthesizer.SpeakSsmlAsync(mstts))
                             {
                                 //if (result.Reason == ResultReason.SynthesizingAudioCompleted)
