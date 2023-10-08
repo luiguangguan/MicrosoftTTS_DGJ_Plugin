@@ -118,6 +118,21 @@ namespace MicrosoftTTS_DGJ_Plugin
             set => SetField(ref _UseSampleMode, value, nameof(UseSampleMode));
         }
 
+        private string _IgnoreDanmu;
+
+        public string IgnoreDanmu
+        {
+            get => _IgnoreDanmu;
+            set => SetField(ref _IgnoreDanmu, value, nameof(IgnoreDanmu));
+        }
+
+        private bool _IgnoreDanmuByRegx;
+        public bool IgnoreDanmuByRegx
+        {
+            get => _IgnoreDanmuByRegx;
+            set => SetField(ref _IgnoreDanmuByRegx, value, nameof(IgnoreDanmuByRegx));
+        }
+
         private ObservableCollection<AiRoles> RolesList { get; set; }
         public ObservableCollection<ComboBoxItem> AiVoiceStyleComboBoxList { get; set; }
         public ObservableCollection<ComboBoxItem> AiRoleComboBoxList { get; set; }
@@ -161,6 +176,32 @@ namespace MicrosoftTTS_DGJ_Plugin
 
         public override Task Speaking(string text)
         {
+            if (!string.IsNullOrEmpty(IgnoreDanmu))
+            {
+                var ignores = IgnoreDanmu?.Split(new char[]{'\n' },StringSplitOptions.RemoveEmptyEntries);
+                if (ignores != null)
+                {
+                    for (int i = 0; i < ignores.Length; i++)
+                    {
+                        if (IgnoreDanmuByRegx)
+                        {
+                            if (Regex.IsMatch(text, ignores[i].Trim('\r').Trim('\n')))
+                            {
+                                Log($"当前弹幕已忽略，【{text}】");
+                                return null;
+                            }
+                        }
+                        else
+                        {
+                            if (ignores[i].Trim() == text.Trim())
+                            {
+                                Log($"当前弹幕已忽略，【{text}】");
+                                return null;
+                            }
+                        }
+                    }
+                }
+            }
             lock (locker)
             {
                 if (text != null)

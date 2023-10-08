@@ -51,6 +51,12 @@ namespace MicrosoftTTS_DGJ_Plugin
         [JsonProperty("CharacterCount")]
         public long CharacterCount { get; set; } = 0;
 
+        [JsonProperty("IgnoreDanmu")]
+        public string IgnoreDanmu { get; set; } = "";
+
+        [JsonProperty("IgnoreDanmuByRegx")]
+        public bool IgnoreDanmuByRegx { get; set; } = false;
+
         internal static Config Load(bool reset = false)
         {
             Config config = new Config();

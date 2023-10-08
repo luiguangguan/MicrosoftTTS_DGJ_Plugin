@@ -87,6 +87,8 @@ namespace MicrosoftTTS_DGJ_Plugin
             MicrosoftTTS.UseWinTts = config.UseWinTts;
             MicrosoftTTS.CharacterCount = config.CharacterCount;
             MicrosoftTTS.UseSampleMode = config.UseSampleMode;
+            MicrosoftTTS.IgnoreDanmu = config.IgnoreDanmu;
+            MicrosoftTTS.IgnoreDanmuByRegx = config.IgnoreDanmuByRegx;
 
         }
         private void TestSpeakingClick(object parameter)
@@ -119,6 +121,9 @@ namespace MicrosoftTTS_DGJ_Plugin
             UseWinTts = MicrosoftTTS.UseWinTts,
             CharacterCount = MicrosoftTTS.CharacterCount,
             UseSampleMode = MicrosoftTTS.UseSampleMode,
+            IgnoreDanmu = MicrosoftTTS.IgnoreDanmu,
+            IgnoreDanmuByRegx = MicrosoftTTS.IgnoreDanmuByRegx,
+
         };
 
         internal void DeInit()
