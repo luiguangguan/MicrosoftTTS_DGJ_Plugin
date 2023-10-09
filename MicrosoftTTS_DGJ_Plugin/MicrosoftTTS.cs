@@ -185,7 +185,7 @@ namespace MicrosoftTTS_DGJ_Plugin
                     {
                         if (IgnoreDanmuByRegx)
                         {
-                            if (Regex.IsMatch(text, ignores[i].Trim('\r').Trim('\n')))
+                            if (Regex.IsMatch(text, ignores[i]?.Trim('\r')?.Trim('\n')))
                             {
                                 Log($"当前弹幕已忽略，【{text}】");
                                 return null;
@@ -193,7 +193,7 @@ namespace MicrosoftTTS_DGJ_Plugin
                         }
                         else
                         {
-                            if (ignores[i].Trim() == text.Trim())
+                            if (ignores[i]?.Trim() == text?.Trim())
                             {
                                 Log($"当前弹幕已忽略，【{text}】");
                                 return null;
