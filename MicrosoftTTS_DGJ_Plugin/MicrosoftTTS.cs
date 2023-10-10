@@ -176,9 +176,9 @@ namespace MicrosoftTTS_DGJ_Plugin
 
         public override Task Speaking(string text)
         {
-            if (!string.IsNullOrEmpty(IgnoreDanmu))
+            if (!string.IsNullOrEmpty(IgnoreDanmu) && !string.IsNullOrEmpty(text))
             {
-                var ignores = IgnoreDanmu?.Split(new char[]{'\n' },StringSplitOptions.RemoveEmptyEntries);
+                var ignores = IgnoreDanmu?.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
                 if (ignores != null)
                 {
                     for (int i = 0; i < ignores.Length; i++)
